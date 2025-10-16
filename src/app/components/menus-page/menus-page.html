@@ -1,0 +1,97 @@
+    <div class="container my-5" id="menus">
+       
+        <div class="row g-4 p-3 d-flex justify-content-center"style="border: 6px solid black;">
+            <!-- Menus -->
+            
+                <h3>{{menuName}}</h3>
+                @for (menuitem of paginatedItems; track menuitem.id) {
+                <div class="col-md-6 ">
+                    <div class="card border-0 shadow-md mb-3" >
+                        <div class="row g-0">
+                        
+                            <div class="col-md-5">
+                            <img [src]="menuitem.imgUrl" class="img-fluid rounded-start" style="height: 11rem;" alt="Menu item">
+                            </div>
+
+                        
+                            <div class="col-md-7 d-flex flex-column justify-content-between p-3">
+                            <div>
+                                <input type="checkbox"
+                                        class="form-check-input me-1 border border-warning"
+                                        style="background-color: gold; outline: none; box-shadow: none;">
+                                <label class="form-check-label fw-semibold text-dark">
+                                    {{menuitem.name}}
+                                </label>
+                                <hr class="mt-1 mb-2 text-warning opacity-100" style="width: 40px;">
+                                <p class="text-muted mb-0" style="font-size: 0.9rem;">
+                                {{menuitem.description}}
+                                </p>
+                            </div>
+
+                        
+                            <div class="d-flex justify-content-end">
+                                <div class="bg-warning text-white fw-bold px-3 py-2 rounded-start">
+                                {{menuitem.unitPrice | currency }}
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+            <div class="d-flex justify-content-between"> 
+              <button
+              class="btn btn-white text-dark mb-2"
+              [routerLink]="['/home']"
+                >
+                <u>
+                    <strong>
+                     <i class="bi bi-arrow-left"></i>BACK
+                    </strong>
+                </u>
+                </button>
+               <button
+                class="btn btn-white text-dark mb-2"
+                [routerLink]="[]"
+                >
+                <u>
+                    <strong>
+                    NEXT <i class="bi bi-arrow-right"></i>
+                    </strong>
+              </u>
+            </button>
+              
+            </div>
+             
+       </div>  
+
+
+         <!-- Pagination -->
+        @if (totalPages > 1) {
+            <nav class="d-flex justify-content-center mt-4">
+            <ul class="pagination" style="cursor: pointer;">
+                <li class="page-item" [class.disabled]="pageNumber === 1">
+                <a class="page-link text-dark" (click)="changePage(pageNumber - 1)">Previous</a>
+                </li>
+
+                @for (page of [].constructor(totalPages); let i = $index ; track $index) {
+               <li class="page-item"
+                    [class.active]="pageNumber === i + 1"
+                    [ngStyle]="pageNumber === i + 1 ? {'background-color': 'gold'} : {'background-color': 'white', 'color': 'gold'}">
+                    <a class="page-link  border-2"
+                        (click)="changePage(i + 1)"
+                        [ngStyle]="pageNumber === i + 1 ? {'background-color': 'gold', 'color': 'white'} : {'background-color': 'white', 'color': 'gold'}">
+                        {{ i + 1 }}
+                    </a>
+                </li>
+
+                }
+
+                <li class="page-item" [class.disabled]="pageNumber === totalPages">
+                    <a class="page-link  text-dark" (click)="changePage(pageNumber + 1)">Next</a>
+                </li>
+            </ul>
+            </nav>
+        }
+    </div>     

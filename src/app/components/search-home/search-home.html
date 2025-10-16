@@ -1,0 +1,159 @@
+
+<div class="bg-light">
+    
+   <!-- Hero Section -->
+    <div
+    class="hero-section text-white d-flex align-items-center justify-content-center"
+    style="
+        background-image: url('https://speedoy.com/wp-content/uploads/2016/09/image_2022_05_06T11_30_27_643Z.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 70vh;
+        position: relative;
+    "
+    >
+    <!-- Overlay -->
+    <div
+        class="position-absolute top-0 start-0 w-100 h-100"
+        style="background-color: rgba(0, 0, 0, 0.55);"
+    ></div>
+
+    <!-- Content -->
+    <div class="container position-relative text-center">
+        <h1 class="display-4 fw-bold mb-3">
+        Reserve Your Table at the Best Restaurants
+        </h1>
+        <p class="lead mb-4">
+        Discover amazing dining experiences and book your table in just a few clicks.
+        </p>
+        <a href="#restaurants" class="btn btn-warning btn-lg shadow">
+        Explore Restaurants
+        </a>
+    </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <h3 class="card-title mb-4">Find Your Perfect Dining Experience</h3>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Search by Restaurant Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                    <input #name type="text" class="form-control" placeholder="Enter restaurant name..."
+                                    [(ngModel)]="restaurantName">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Filter by City</label>
+                                <select #city class="form-select" 
+                                [(ngModel)]="selectedCity">
+
+                                    <option ></option>
+                                    <option value="cairo">Cairo</option>
+                                    <option value="mansoura">Mansoura</option>
+                                    <option value="alexandria">Alexadnria</option>
+                                    <option value="sohag">Sohag</option>
+                                    <option value="tanta">Tanta</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-12 mt-3">
+                                <button class="btn btn-warning w-100" (click)="search()">Search Restaurants</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <!-- Restaurants Section -->
+<div class="container my-5" id="restaurants">
+  <div class="row g-4">
+    <!-- Restaurants -->
+    @for (rest of paginatedRestaurants; track rest.id) {
+      <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm" style="width: 18rem; height: 30rem;">
+          <img [src]="rest.imgUrl" class="card-img-top" style="height: 10rem;">
+          <div class="card-body">
+            <h3 class="card-text">{{ rest.name }}</h3>
+
+            <div class="rating mb-2">
+              @for (star of [1, 2, 3, 4, 5]; track $index) {
+                <ng-container>
+                  <i
+                    class="fa"
+                    [ngClass]="{
+                      'fa-star': star <= rest.rating,
+                      'fa-star-half-o': star - rest.rating < 1 && star - rest.rating > 0,
+                      'fa-star-o': star > rest.rating
+                    }"
+                    style="color: gold;"
+                  ></i>
+                </ng-container>
+              }
+              <span class="ms-1">({{ rest.rating | number: '1.1-1' }})</span>
+            </div>
+
+            <p class="card-text">{{ rest.description }}</p>
+            <p class="card-text"><strong>Owner: </strong>{{ rest.ownerName }}</p>
+            <p class="card-text"><strong>Address: </strong>{{ rest.address }}</p>
+          </div>
+
+          <div class="text-center">
+            <button
+              class="btn btn-white text-dark mb-2"
+              [routerLink]="['/menus', rest.id]"
+            >
+              <u>
+                <strong>
+                  MENU <i class="bi bi-arrow-right"></i>
+                </strong>
+              </u>
+            </button>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <h2 class="text-center mb-5">Search for Restaurants</h2>
+    }
+  </div>
+
+  <!-- Pagination -->
+        @if (totalPages > 1) {
+            <nav class="d-flex justify-content-center mt-4">
+            <ul class="pagination" style="cursor: pointer;">
+                <li class="page-item" [class.disabled]="pageNumber === 1">
+                <a class="page-link text-dark" (click)="changePage(pageNumber - 1)">Previous</a>
+                </li>
+
+                @for (page of [].constructor(totalPages); let i = $index ; track $index) {
+               <li class="page-item"
+                    [class.active]="pageNumber === i + 1"
+                    [ngStyle]="pageNumber === i + 1 ? {'background-color': 'gold'} : {'background-color': 'white', 'color': 'gold'}">
+                    <a class="page-link  border-2"
+                        (click)="changePage(i + 1)"
+                        [ngStyle]="pageNumber === i + 1 ? {'background-color': 'gold', 'color': 'white'} : {'background-color': 'white', 'color': 'gold'}">
+                        {{ i + 1 }}
+                    </a>
+                </li>
+
+                }
+
+                <li class="page-item" [class.disabled]="pageNumber === totalPages">
+                    <a class="page-link  text-dark" (click)="changePage(pageNumber + 1)">Next</a>
+                </li>
+            </ul>
+            </nav>
+        }
+</div>
+
+
+    
+</div>
