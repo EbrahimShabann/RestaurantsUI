@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class RestaurantsService {
   constructor(private http:HttpClient){};
-  private url = "https://localhost:7254/api/Restaurants";
+  private url = "http://restaurants-reservation.runasp.net/api/Restaurants";
 
 
   GetRestaurantsByCityOrName(city:string,name:string):Observable<any>

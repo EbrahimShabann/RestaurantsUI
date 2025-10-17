@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class MenusService {
   constructor(private http:HttpClient){};
-  private url = "https://localhost:7254/api/Menus";
+  private url = "http://restaurants-reservation.runasp.net/api/Menus";
 
 
   GetMenus(restaurantId:number):Observable<any>
