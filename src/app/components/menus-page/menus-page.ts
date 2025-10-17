@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Event, Router, RouterLink } from '@angular/router';
 import { MenusService } from '../../services/menus-service';
-import { Menu } from '../../models/menu';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MenuItem } from '../../models/menu-item';
 
@@ -16,10 +15,11 @@ export class MenusPage implements OnInit{
   restaurantId!:number;
   menuName!:string;
   menuItems:MenuItem[]=[];
+  selectedMenuItems:MenuItem[]=[];
   pageNumber:number=1;
   pageSize:number=4;
 
-  constructor(private route:ActivatedRoute,
+  constructor(private route:ActivatedRoute,private router:Router,
      private menuService:MenusService ,private cdr:ChangeDetectorRef){}
 
 
@@ -36,10 +36,45 @@ export class MenusPage implements OnInit{
     })
   }
 
+
+//select menuItems
+selectItem(event:any,item:any){
+  if(event.target.checked){
+    item.quantity=1;
+    this.selectedMenuItems.push(item);
+  }else{
+    this.selectedMenuItems=this.selectedMenuItems.filter(i=>i.id != item.id);
+  }
+}
+
+Next(){
+  if(this.selectedMenuItems.length==0){
+    alert("You must select at least 1 item!");
+    return;
+  }
+  this.router.navigate([`/customerData`],
+    {
+      queryParams:{
+        items:JSON.stringify(this.selectedMenuItems),
+        restId:this.restaurantId
+      }
+    });
+}
+
+
+
+  //pagination
+
    get paginatedItems() {
       const startIndex = (this.pageNumber - 1) * this.pageSize;
       return this.menuItems.slice(startIndex, startIndex + this.pageSize);
     }
+
+    get totalPages() {
+   
+      return Math.ceil(this.menuItems.length / this.pageSize);
+    }
+
 
     changePage(page: number) {
        if(page >=1 && page <= this.totalPages){
@@ -47,9 +82,8 @@ export class MenusPage implements OnInit{
       }
     }
 
-  get totalPages() {
-   
-      return Math.ceil(this.menuItems.length / this.pageSize);
-      }
+    
+
+ 
 
 }

@@ -1,0 +1,87 @@
+<div class="container my-5">
+  <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+    <div class="card-header bg-warning text-white text-center py-4">
+      <h2 class="fw-bold mb-0">
+        <i class="bi bi-calendar-check me-2"></i> Reserve Your Table
+      </h2>
+    </div>
+
+    <div class="card-body bg-light p-5">
+      <form [formGroup]="customerForm" (ngSubmit)="submit()">
+
+        <div class="row g-4 mb-4">
+          <!-- Name -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold text-dark">
+              <i class="bi bi-person-fill me-1"></i> Full Name
+            </label>
+            <input formControlName="name" type="text" class="form-control form-control-lg border-warning"
+              placeholder="Enter your full name">
+            @if(getName.touched && getName.hasError('required')){
+              <div class="text-danger small mt-1">Name is required</div>
+            }
+            @else if (getName.hasError('minlength')) {
+              <div class="text-danger small mt-1">Name must be at least 10 characters</div>
+            }
+          </div>
+
+          <!-- Phone -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold text-dark">
+              <i class="bi bi-telephone-fill me-1"></i> Phone Number
+            </label>
+            <input formControlName="phone" type="text" class="form-control form-control-lg border-warning"
+              placeholder="Enter valid phone number">
+            @if(getPhone.touched && getPhone.hasError('required')){
+              <div class="text-danger small mt-1">Phone is required</div>
+            }
+            @else if (getPhone.hasError('pattern')) {
+              <div class="text-danger small mt-1">Enter a valid phone like (01555178340)</div>
+            }
+          </div>
+
+          <!-- Email -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold text-dark">
+              <i class="bi bi-envelope-fill me-1"></i> Email
+            </label>
+            <input formControlName="email" type="text" class="form-control form-control-lg border-warning"
+              placeholder="Enter valid email">
+            @if(getEmail.touched && getEmail.hasError('required')){
+              <div class="text-danger small mt-1">Email is required</div>
+            }
+            @else if (getEmail.hasError('pattern')) {
+              <div class="text-danger small mt-1">Enter valid email like (ebrahim@gmail.com)</div>
+            }
+          </div>
+
+          <!-- Address -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold text-dark">
+              <i class="bi bi-geo-alt-fill me-1"></i> Address
+            </label>
+            <input formControlName="address" type="text" class="form-control form-control-lg border-warning"
+              placeholder="Enter your address">
+            @if(getAddress.touched && getAddress.hasError('required')){
+              <div class="text-danger small mt-1">Address is required</div>
+            }
+            @else if (getAddress.hasError('pattern')) {
+              <div class="text-danger small mt-1">Enter valid address like (15 Ahmed Orabi St., Giza)</div>
+            }
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="text-center mt-4">
+          <button class="btn btn-outline-dark btn-lg col-5 me-2" [routerLink]="[`/menus`,restaurantId]">
+            <i class="bi bi-arrow-left"></i> Back to Menu
+          </button>
+          <button type="submit" [disabled]="customerForm.invalid" class="btn btn-warning btn-lg col-5">
+            <i class="bi bi-check2-circle"></i> Confirm Reservation
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

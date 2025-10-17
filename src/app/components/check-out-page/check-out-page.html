@@ -1,0 +1,135 @@
+<div class="container my-5">
+
+  <!-- ====== Customer Info ====== -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+     
+      
+
+      <h3 class="fw-bold mb-4 text-uppercase">Your Data</h3>
+
+      <div class="row text-center text-md-start">
+        <!-- Name -->
+        <div class="col-md-3 mb-3">
+          <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+            <i class="bi bi-person-fill text-warning fs-4 me-2"></i>
+            <div>
+              <div class="fw-semibold">Name</div>
+              <div class="text-muted">{{customerData.name}}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="col-md-3 mb-3">
+          <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+            <i class="bi bi-telephone-fill text-warning fs-4 me-2"></i>
+            <div>
+              <div class="fw-semibold">Phone</div>
+              <div class="text-muted">{{customerData.phone}}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="col-md-3 mb-3">
+          <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+            <i class="bi bi-envelope-fill text-warning fs-4 me-2"></i>
+            <div>
+              <div class="fw-semibold">E-mail</div>
+              <div class="text-muted">{{customerData.email}}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="col-md-3 mb-3">
+          <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+            <i class="bi bi-geo-alt-fill text-warning fs-4 me-2"></i>
+            <div>
+              <div class="fw-semibold">Address</div>
+              <div class="text-muted">{{customerData.address}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== Items Table ====== -->
+  <div class="table-responsive mb-4">
+    <table class="table align-middle text-center">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Price</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Total</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items; track $index) {
+        <tr>
+          <td class="text-start">
+            <div class="d-flex align-items-center">
+              <img [src]="item.imgUrl" class="rounded me-3" alt="product" style="width: 15rem;">
+              <span class="fw-semibold">{{item.name}}</span>
+            </div>
+          </td>
+          <td class="fw-semibold">{{item.unitPrice|currency}}</td>
+          <td>
+            <div class="btn-group" role="group" aria-label="quantity controls">
+              <button class="btn btn-outline-dark btn-sm" (click)="increaseQuantity(item)">+</button>
+                <input type="number" class="form-control form-control-sm text-center" 
+                style="width: 50px;" [value]="item.quantity" min="1" (change)="changeQuantity($event,item)" >
+              <button class="btn btn-outline-dark btn-sm" (click)="decreaseQuantity(item)">−</button>
+            </div>
+          </td>
+          <td class="fw-semibold">{{item.unitPrice *item.quantity|currency}}</td>
+          <td><i class="bi bi-x text-danger fs-5" role="button" (click)="removeItem(item)" style="cursor: pointer;"></i></td>
+        </tr>
+    }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== Total Summary ====== -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 offset-md-6">
+          <table class="table table-borderless">
+            <tbody>
+              <tr>
+                <td class="fw-semibold">Subtotal</td>
+                <td class="text-end fw-semibold">{{customerData.totalPrice|currency}}</td>
+              </tr>
+              <tr class="border-top">
+                <td class="fw-bold fs-5 text-dark">Total</td>
+                <td class="text-end fw-bold fs-5 text-dark">{{customerData.totalPrice|currency}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-outline-dark px-4" (click)="goBack()">
+              <i class="bi bi-arrow-left"></i> Back
+            </button>
+            @if(items==undefined || items.length==0){
+               <button class="btn btn-warning text-white px-4 fw-semibold"
+                disabled>
+                  Checkout <i class="bi bi-arrow-right"></i>
+                </button>
+              }@else{
+                   <button class="btn btn-warning text-white px-4 fw-semibold"
+              (click)="checkout()">
+               Checkout <i class="bi bi-arrow-right"></i>
+            </button>
+              }
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -75,6 +75,9 @@
 
    <!-- Restaurants Section -->
 <div class="container my-5" id="restaurants">
+  @if(restaurants.length==0){
+  <h2>Featured Restaurants</h2>
+  }
   <div class="row g-4">
     <!-- Restaurants -->
     @for (rest of paginatedRestaurants; track rest.id) {
