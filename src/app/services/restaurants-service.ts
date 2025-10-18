@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class RestaurantsService {
   constructor(private http:HttpClient){};
-  private url = "https://corsproxy.io/?http://restaurants-reservation.runasp.net/api/Restaurants";
+  private url = "https://restaurants-reservation.runasp.net/api/Restaurants";
 
 
   GetRestaurantsByCityOrName(city:string,name:string):Observable<any>
