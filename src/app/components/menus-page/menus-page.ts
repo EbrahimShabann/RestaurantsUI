@@ -10,7 +10,7 @@ import { MenuItem } from '../../models/menu-item';
   templateUrl: './menus-page.html',
   styleUrl: './menus-page.css'
 })
-export class MenusPage implements OnInit{
+export class MenusPage {
 
   restaurantId!:number;
   menuName!:string;
@@ -20,21 +20,19 @@ export class MenusPage implements OnInit{
   pageSize:number=4;
 
   constructor(private route:ActivatedRoute,private router:Router,
-     private menuService:MenusService ,private cdr:ChangeDetectorRef){}
-
-
-
-  ngOnInit(): void {
-    this.restaurantId= Number(this.route.snapshot.paramMap.get('id'));
-    this.menuService.GetMenus(this.restaurantId).subscribe({
+     private menuService:MenusService ,private cdr:ChangeDetectorRef){
+      this.restaurantId= Number(this.route.snapshot.paramMap.get('id'));
+       this.menuService.GetMenus(this.restaurantId).subscribe({
       next:result=>{
         this.menuItems=result[0].foodItems
         this.menuName=result[0].name;
         console.log(this.menuItems.length);
         this.cdr.detectChanges();
       }
-    })
-  }
+    })}
+
+
+
 
 
 //select menuItems

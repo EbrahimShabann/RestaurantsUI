@@ -1,4 +1,3 @@
-import { CustomerData } from './../customer-data/customer-data';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { customerDataDto } from '../../models/check-out-dto';
@@ -8,20 +7,17 @@ import { OrderService } from '../../services/order-service';
 
 @Component({
   selector: 'app-check-out-page',
-  imports: [CurrencyPipe,RouterLink],
+  imports: [CurrencyPipe],
   templateUrl: './check-out-page.html',
   styleUrl: './check-out-page.css'
 })
-export class CheckOutPage implements OnInit{
+export class CheckOutPage  {
 customerData!:customerDataDto;
 items:OrderItem[]=[];
 restauratnId!:number;
 
-  constructor(private route:ActivatedRoute, private router:Router,private orderService:OrderService){}
-
-
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params=>{
+  constructor(private route:ActivatedRoute, private router:Router,private orderService:OrderService){
+     this.route.queryParams.subscribe(params=>{
       
       this.customerData=JSON.parse(params['data']);
       this.items=JSON.parse(params['items']);
@@ -31,6 +27,8 @@ restauratnId!:number;
     })
   }
 
+
+  
 
   get calcTotalPrice(){
     return this.customerData.totalPrice=this.items.reduce((pre,curr)=> pre + curr.unitPrice*curr.quantity,0);

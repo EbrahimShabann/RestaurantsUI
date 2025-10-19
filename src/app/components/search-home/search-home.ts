@@ -11,7 +11,7 @@ import {  RouterLink } from '@angular/router';
   templateUrl: './search-home.html',
   styleUrl: './search-home.css'
 })
-export class SearchHome implements OnInit {
+export class SearchHome  {
 selectedCity:string='';
 restaurantName:string='';
 restaurants : IRestaurant[]=[];
@@ -21,11 +21,7 @@ pageSize:number=4;
 
 
 constructor(private restService : RestaurantsService ,
-   private cdr:ChangeDetectorRef ){}
-
-
-  ngOnInit(): void {
-    this.restService.GetFeaturedRestaurants().subscribe({
+   private cdr:ChangeDetectorRef ){ this.restService.GetFeaturedRestaurants().subscribe({
         next:(result)=>{
           this.featuredRestaurants=result;
           console.log(this.restaurants);
@@ -35,9 +31,10 @@ constructor(private restService : RestaurantsService ,
         error:(err)=>{
           console.log(err);
         }
-      });
-  }
+      });}
 
+
+  
 
   search(){
    this.restService.GetRestaurantsByCityOrName(this.selectedCity,this.restaurantName).subscribe({

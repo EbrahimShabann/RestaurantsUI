@@ -19,7 +19,7 @@ import { MenuItem } from '../../models/menu-item';
   styleUrl: './customer-data.css'
 })
 
-export class CustomerData implements OnInit {
+export class CustomerData {
   restaurantId!:number;
   menuItems:MenuItem[]=[];
 
@@ -36,16 +36,16 @@ export class CustomerData implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private route:ActivatedRoute,
-  ) {}
-
-  ngOnInit(): void {
-       this.route.queryParams.subscribe(params=>{
+  ) {
+     this.route.queryParams.subscribe(params=>{
           this.restaurantId=params['restId'],
           this.menuItems=params['items']
         console.log(this.menuItems)
        });
 
   }
+
+  
 
   get getName() {
     return this.customerForm.controls['name'];
