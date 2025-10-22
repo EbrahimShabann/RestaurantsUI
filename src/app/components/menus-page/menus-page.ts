@@ -3,6 +3,7 @@ import { ActivatedRoute, Event, Router, RouterLink } from '@angular/router';
 import { MenusService } from '../../services/menus-service';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MenuItem } from '../../models/menu-item';
+import { CustomerService } from '../../services/customer-service';
 
 @Component({
   selector: 'app-menus-page',
@@ -12,23 +13,24 @@ import { MenuItem } from '../../models/menu-item';
 })
 export class MenusPage {
 
-  restaurantId!:number;
   menuName!:string;
   menuItems:MenuItem[]=[];
-  selectedMenuItems:MenuItem[]=[];
+  cart:MenuItem[]=[];
   pageNumber:number=1;
   pageSize:number=4;
 
   constructor(private route:ActivatedRoute,private router:Router,
-     private menuService:MenusService ,private cdr:ChangeDetectorRef){
-      this.restaurantId= Number(this.route.snapshot.paramMap.get('id'));
-       this.menuService.GetMenus(this.restaurantId).subscribe({
-      next:result=>{
-        this.menuItems=result[0].foodItems
-        this.menuName=result[0].name;
-        console.log(this.menuItems.length);
-        this.cdr.detectChanges();
-      }
+     private menuService:MenusService ,private cdr:ChangeDetectorRef,private _customerService:CustomerService){
+
+      this._customerService.restaurantId= Number(this.route.snapshot.paramMap.get('id'));
+      this.cart=CustomerService.cart;
+       this.menuService.GetMenus(this._customerService.restaurantId).subscribe({
+        next:result=>{
+          this.menuItems=result[0].foodItems
+          this.menuName=result[0].name;
+          // console.log(this.menuItems.length);
+          this.cdr.detectChanges();
+        }
     })}
 
 
@@ -39,24 +41,25 @@ export class MenusPage {
 selectItem(event:any,item:any){
   if(event.target.checked){
     item.quantity=1;
-    this.selectedMenuItems.push(item);
+    this.cart.push(item);
   }else{
-    this.selectedMenuItems=this.selectedMenuItems.filter(i=>i.id != item.id);
+    this.cart=this.cart.filter(i=>i.id != item.id);
   }
 }
 
 Next(){
-  if(this.selectedMenuItems.length==0){
+  if(this.cart.length==0){
     alert("You must select at least 1 item!");
     return;
   }
-  this.router.navigate([`/customerData`],
-    {
-      queryParams:{
-        items:JSON.stringify(this.selectedMenuItems),
-        restId:this.restaurantId
-      }
-    });
+  console.log(this.cart)
+  this.router.navigate([`/customerData`]);
+    // {
+    //   queryParams:{
+    //     items:JSON.stringify(this.selectedMenuItems),
+    //     restId:this.restaurantId
+    //   }
+    // });
 }
 
 

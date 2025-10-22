@@ -4,6 +4,7 @@ import { RestaurantsService } from '../../services/restaurants-service';
 import { IRestaurant } from '../../models/irestaurant';
 import { CommonModule } from '@angular/common';
 import {  RouterLink } from '@angular/router';
+import { CustomerService } from '../../services/customer-service';
 
 @Component({
   selector: 'app-search-home',
@@ -21,7 +22,9 @@ pageSize:number=4;
 
 
 constructor(private restService : RestaurantsService ,
-   private cdr:ChangeDetectorRef ){ this.restService.GetFeaturedRestaurants().subscribe({
+   private cdr:ChangeDetectorRef ){
+   
+     this.restService.GetFeaturedRestaurants().subscribe({
         next:(result)=>{
           this.featuredRestaurants=result;
           console.log(this.restaurants);
@@ -31,7 +34,13 @@ constructor(private restService : RestaurantsService ,
         error:(err)=>{
           console.log(err);
         }
-      });}
+      });
+    
+    CustomerService.cart=[];
+    
+    
+    }
+  
 
 
   

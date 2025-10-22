@@ -4,6 +4,7 @@ import { customerDataDto } from '../../models/check-out-dto';
 import { OrderItem } from '../../models/order-item';
 import { CurrencyPipe } from '@angular/common';
 import { OrderService } from '../../services/order-service';
+import { CustomerService } from '../../services/customer-service';
 
 @Component({
   selector: 'app-check-out-page',
@@ -16,15 +17,16 @@ customerData!:customerDataDto;
 items:OrderItem[]=[];
 restauratnId!:number;
 
-  constructor(private route:ActivatedRoute, private router:Router,private orderService:OrderService){
-     this.route.queryParams.subscribe(params=>{
-      
-      this.customerData=JSON.parse(params['data']);
-      this.items=JSON.parse(params['items']);
-      this.restauratnId=params['id'];
+  constructor(private route:ActivatedRoute, private router:Router,private orderService:OrderService,
+    private _customerService :CustomerService
+  ){
+
+      this.customerData=this._customerService.customerData;
+      this.items=CustomerService.cart;
+      this.restauratnId=this._customerService.restaurantId;
       console.log(this.items)
       this.calcTotalPrice;
-    })
+  
   }
 
 
@@ -80,6 +82,7 @@ restauratnId!:number;
       this.orderService.checkOut(checkOutDto).subscribe({
         next:(result)=>{
           alert(result.message);
+          CustomerService.cart=[];
           this.router.navigate(['/home']);
         },
         error:(err)=>{
@@ -90,14 +93,7 @@ restauratnId!:number;
 
 
   goBack(){
-    this.router.navigate([`/customerData`],
-    {
-      queryParams:{
-         restId:this.restauratnId,
-        items:JSON.stringify(this.items),
-       
-      }
-    });
+    this.router.navigate([`/customerData`]);
   }
 
 

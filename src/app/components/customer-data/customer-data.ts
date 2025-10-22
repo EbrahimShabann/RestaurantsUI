@@ -1,12 +1,11 @@
+import { CustomerService } from './../../services/customer-service';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, Input } from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
+
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -20,9 +19,7 @@ import { MenuItem } from '../../models/menu-item';
 })
 
 export class CustomerData {
-  restaurantId!:number;
-  menuItems:MenuItem[]=[];
-
+restaurantId:number;
 
   customerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(10)]),
@@ -32,18 +29,9 @@ export class CustomerData {
   });
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-    private route:ActivatedRoute,
-  ) {
-     this.route.queryParams.subscribe(params=>{
-          this.restaurantId=params['restId'],
-          this.menuItems=params['items']
-        console.log(this.menuItems)
-       });
-
-  }
+    private router: Router, private _customerService :CustomerService) {
+      this.restaurantId=this._customerService.restaurantId;
+    }
 
   
 
@@ -68,14 +56,8 @@ export class CustomerData {
 
   submit(){
     if(this.customerForm.valid){
-      const formValue= this.customerForm.value;
-      this.router.navigate(['/checkout'],{
-        queryParams:{
-          items:this.menuItems,
-          data:JSON.stringify(formValue),
-          id:this.restaurantId,
-        }
-      })
+      this._customerService.customerData= this.customerForm.value;
+      this.router.navigate(['/checkout'])
     }
   }
 
